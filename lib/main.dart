@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_scripture/config/theme/presentation/bloc/theme_bloc.dart';
 import 'package:my_scripture/splash_feature/presentation/bloc/splash_bloc.dart';
-import 'package:my_scripture/splash_feature/presentation/splash_screen.dart';
+import 'package:my_scripture/splash_feature/presentation/screens/splash_screen.dart';
 
 void main() {
   runApp(const ScriptureApp());
@@ -17,15 +18,20 @@ class ScriptureApp extends StatelessWidget {
         BlocProvider(
           create: (context) => SplashBloc(),
         ),
-
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Scripture App',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+        BlocProvider(
+          create: (context) => ThemeBloc(),
         ),
-        home: const SplashScreen(),
+      ],
+      child: BlocBuilder<ThemeBloc, ThemeState>(
+        builder: (context, state) {
+          final themeState = state as ThemeInitial;
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Scripture App',
+            theme: themeState.themeData,
+            home: const SplashScreen(),
+          );
+        },
       ),
     );
   }
